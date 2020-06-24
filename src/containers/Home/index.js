@@ -1,10 +1,10 @@
+import React from 'react';
 
-const React = require('react')
+const Home = () => (
+  <div>
+    <div>this is dell les</div>
+    <button onClick={() => { console.log('click'); }}>click</button>
+  </div>
+);
 
-const Home = ()=>(
-  <div>Home</div>
-)
-
-module.exports = {
-  default: Home
-}
+export default Home;
