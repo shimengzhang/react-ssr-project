@@ -4,6 +4,7 @@ const baseConfig = require('./webpack.base');
 
 const clientConfig = {
   mode: 'development',
+  watch: true,
   entry: './src/client/index.js',
   output: {
     filename: 'index.js',

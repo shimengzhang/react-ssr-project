@@ -1,13 +1,24 @@
 import React from 'react';
 import { renderToString } from 'react-dom/server';
-import { StaticRouter } from 'react-router-dom';
-import Routes from '../Routes';
+import { StaticRouter, Route, matchPath } from 'react-router-dom';
+import { Provider } from 'react-redux';
 
-export const render = (req) => {
+export const render = (req, store, routes) => {
+  // 如果在这里，能拿到异步数据，并填充到 store 中，服务端渲染时就有数据了
+  // store 里填充什么数据，需要结合用户请求地址和路由，做判断
+
   const content = renderToString((
-    <StaticRouter location={req.path} context={{}}>
-      {Routes}
-    </StaticRouter>
+      <Provider store={store}>
+        <StaticRouter location={req.path} context={{}}>
+          <div>
+          {
+            routes.map((route) => (
+              <Route {...route}/>
+            ))
+          }
+          </div>
+        </StaticRouter>
+      </Provider>
   ));
 
   return `
@@ -20,6 +31,11 @@ export const render = (req) => {
     </head>
     <body>
       <div id='root'>${content}</div>
+      <script>
+          window.context = {
+            state: ${JSON.stringify(store.getState())}
+          }
+      </script>
       <script src='./index.js'></script>
     </body>
     </html>
