@@ -5,7 +5,7 @@ const changeListAction = (list) => ({
   list,
 });
 
-export const getHomeListAction = () => (dispatch, getState, axiosInstance) => axiosInstance.get('/api/homelist.json')
+export const getHomeListAction = () => (dispatch, getState, axiosInstance) => axiosInstance.get('/api/homelists.json')
   .then((res) => {
     const list = res.data.data;
     dispatch(changeListAction(list));

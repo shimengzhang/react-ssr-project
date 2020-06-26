@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { actionCreators } from './store1';
+import './style.css';
 
 const Home = (props) => {
   const { name, newsList, getHomeList } = props;

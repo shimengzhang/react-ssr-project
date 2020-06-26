@@ -4,13 +4,12 @@ import { StaticRouter, Route, matchPath } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { renderRoutes } from 'react-router-config';
 
-export const render = (req, store, routes) => {
+export const render = (req, store, routes, context) => {
   // 如果在这里，能拿到异步数据，并填充到 store 中，服务端渲染时就有数据了
   // store 里填充什么数据，需要结合用户请求地址和路由，做判断
-  console.log('store', store.getState());
   const content = renderToString((
       <Provider store={store}>
-        <StaticRouter location={req.path} context={{}}>
+        <StaticRouter location={req.path} context={context}>
           <div>
           {
             renderRoutes(routes)

@@ -13,24 +13,34 @@ app.use(express.static('public'));
 
 app.use('/api', proxy('http://test.autohome.com.cn:3001', {
   proxyReqPathResolver(req) {
-    console.log(req.url);
     return `/api${req.url}`;
   },
 }));
 
 app.get('*', (req, res) => {
-  const store = getStore();
+  const store = getStore(req);
   const matchedRoutes = matchRoutes(routes, req.path);
   const promises = [];
 
   matchedRoutes.forEach((item) => {
     if (item.route.loadData) {
-      promises.push(item.route.loadData(store));
+      const promise = new Promise((resolve, reject) => {
+        item.route.loadData(store).then(resolve).catch(resolve);
+      });
+      promises.push(promise);
     }
   });
-  console.log('promises', promises);
   Promise.all(promises).then(() => {
-    res.send(render(req, store, routes));
+    const context = {};
+    const html = render(req, store, routes, context);
+    console.log('context', context);
+
+    if (context.action === 'REPLACE') {
+      res.redirect(301, context.url);
+    } else if (context.NotFound) {
+      res.status(404);
+    }
+    res.send(html);
   });
 });
 
