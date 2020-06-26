@@ -2,28 +2,28 @@ import React from 'react';
 import { Route } from 'react-router-dom';
 import Home from './containers/Home';
 import Login from './containers/Login';
+import App from './App';
 
 export default [
   {
-    path: '/',
-    component: Home,
-    exact: true,
-    loadData: Home.loadData(),
-    key: 'home',
+    path: '/', // 这一级不要使用 exact
+    component: App,
+    key: 'app',
     routes: [
       {
-        path: '/ttt',
+        path: '/',
+        component: Home,
+        exact: true,
+        loadData: Home.loadData(),
+        key: 'home',
+      },
+      {
+        path: '/login',
         component: Login,
         exact: true,
-        key: 'ttt',
+        key: 'login',
       },
     ],
-  },
-  {
-    path: '/login',
-    component: Login,
-    exact: true,
-    key: 'login',
   },
 ];
 

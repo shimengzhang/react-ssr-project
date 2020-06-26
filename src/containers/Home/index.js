@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import Header from '../../components/header';
 import { actionCreators } from './store1';
 
 const Home = (props) => {
@@ -12,7 +11,6 @@ const Home = (props) => {
   }, []);
   return (
     <div>
-      <Header/>
       <div>this is a {name}</div>
       {
         newsList.map((item) => (

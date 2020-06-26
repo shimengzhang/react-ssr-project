@@ -1,4 +1,5 @@
 import express from 'express';
+import proxy from 'express-http-proxy';
 import { matchRoutes } from 'react-router-config';
 import { render } from './utils';
 import { getStore } from '../store';
@@ -10,8 +11,14 @@ const port = 3000;
 
 app.use(express.static('public'));
 
+app.use('/api', proxy('http://test.autohome.com.cn:3001', {
+  proxyReqPathResolver(req) {
+    console.log(req.url);
+    return `/api${req.url}`;
+  },
+}));
+
 app.get('*', (req, res) => {
-  // res.send(render(req));
   const store = getStore();
   const matchedRoutes = matchRoutes(routes, req.path);
   const promises = [];
@@ -21,7 +28,7 @@ app.get('*', (req, res) => {
       promises.push(item.route.loadData(store));
     }
   });
-
+  console.log('promises', promises);
   Promise.all(promises).then(() => {
     res.send(render(req, store, routes));
   });
